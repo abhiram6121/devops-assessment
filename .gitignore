@@ -11,3 +11,7 @@
 .env.*
 !.env.example
 !.env.prod.example
+
+# Deployment state
+.deploy_state/
+
