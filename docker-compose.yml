@@ -19,6 +19,27 @@ services:
     networks:
       - app-network
 
+  ministack:
+    image: ministackorg/ministack:latest
+    container_name: devops-ministack
+    restart: unless-stopped
+    ports:
+      - "4566:4566"
+    environment:
+      - S3_PERSIST=1
+      - PERSIST_STATE=1
+    volumes:
+      - ministack_state:/tmp/ministack-state
+      - ministack_data:/tmp/ministack-data/s3
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4566/_ministack/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - app-network
+
   backend:
     build:
       context: ./backend
@@ -43,6 +64,8 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS}
     depends_on:
       db:
+        condition: service_healthy
+      ministack:
         condition: service_healthy
     ports:
       - "8000:8000"
@@ -83,4 +106,8 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
+  ministack_state:
+    driver: local
+  ministack_data:
     driver: local
