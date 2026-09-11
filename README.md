@@ -354,3 +354,12 @@ If database schemas or MiniStack storage need to be reset from scratch:
 docker compose down -v
 docker compose up -d --build
 ```
+
+---
+
+## 12. Screen Recording
+
+Demonstration of the working solution, CI/CD, and automated rollback:
+- [Watch Screen Recording](https://www.loom.com/share/308e0b96385d4b4d8afde47260efb49d)
+
+
